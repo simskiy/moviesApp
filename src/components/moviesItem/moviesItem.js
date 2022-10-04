@@ -1,19 +1,22 @@
 import React from 'react'
-import { Image } from 'antd'
+import { Image, Rate } from 'antd'
 
 import getGenre from './getGenre'
+import './style.scss'
 
 const MoviesItem = (props) => {
   const opt = props.opt
+  // console.log(opt)
   return (
     <li className="movies-item">
-      <h2>{opt.title}</h2>
-      <Image src={`${props.imgUrl}${opt.poster_path}`} />
-      <p>{opt.overview}</p>
-      <p>{opt.release_date}</p>
-      <p>{opt.vote_average}</p>
-      <p>{opt.popularity}</p>
-      <p>{getGenre(opt.genre_ids).join(' ')}</p>
+      <h2 className="movies-item__title">{opt.title}</h2>
+      <Image className="movies-item__img" src={`${props.imgUrl}${opt.poster_path}`} />
+      <p className="movies-item__overview">{opt.overview}</p>
+      <p className="movies-item__release-date">{opt.release_date}</p>
+      {/* <p className="movies-item__vote-average">{opt.vote_average}</p> */}
+      <Rate className="movies-item__vote-avegare" disabled value={opt.vote_average} count={10} allowHalf={true} />
+      <p className="movies-item__popularity">{opt.popularity}</p>
+      <p className="movies-item__genre">{getGenre(opt.genre_ids).join(' ')}</p>
     </li>
   )
 }

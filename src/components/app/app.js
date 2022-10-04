@@ -5,6 +5,8 @@ import { Input } from 'antd'
 import MoviesList from '../moviesList/moviesList'
 import getResource from '../../utils/GetResource'
 
+import './style.scss'
+
 export default class App extends Component {
   constructor() {
     super()
@@ -39,9 +41,8 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this.state)
     return (
-      <div className="container">
+      <div className="movies-container">
         <Input placeholder="Type to search..." onPressEnter={(e) => this.getMovies(e.target.value)} />
         <MoviesList moviesList={this.state.moviesArr} config={this.state} imgUrl={this.state.imgUrl} />
       </div>
