@@ -4,6 +4,7 @@ import { Input } from 'antd'
 
 import MoviesList from '../moviesList/moviesList'
 import getResource from '../../utils/GetResource'
+import Load from '../load/load'
 
 import './style.scss'
 
@@ -11,24 +12,27 @@ export default class App extends Component {
   constructor() {
     super()
     this.movies = new getResource()
-    this.state = {
-      moviesArr: [],
-      imgUrl: null,
-    }
+  }
+  state = {
+    moviesArr: [],
+    imgUrl: null,
+    loading: false,
+    valueInput: '',
   }
 
   componentDidMount() {
     this.movies.getConfig().then((item) => {
       const result = `${item.images.base_url}${item.images.poster_sizes[2]}`
-      this.setState(() => {
-        return {
-          imgUrl: result,
-        }
+      this.setState({
+        imgUrl: result,
       })
     })
   }
 
   getMovies = (str) => {
+    this.setState({
+      loading: true,
+    })
     this.movies.findMovies(str).then((movies) => {
       const newMovies = []
       movies.forEach((movie) => {
@@ -36,15 +40,27 @@ export default class App extends Component {
       })
       this.setState({
         moviesArr: newMovies,
+        loading: false,
       })
     })
   }
 
   render() {
+    const { moviesArr, imgUrl, loading } = this.state
+    const spinner = loading ? <Load /> : null
+    // const content = !loading ? <MoviesList moviesList={moviesArr} imgUrl={imgUrl} /> : null
     return (
       <div className="movies-container">
-        <Input placeholder="Type to search..." onPressEnter={(e) => this.getMovies(e.target.value)} />
-        <MoviesList moviesList={this.state.moviesArr} config={this.state} imgUrl={this.state.imgUrl} />
+        <Input
+          placeholder="Type to search..."
+          onPressEnter={(e) => {
+            this.getMovies(e.target.value)
+          }}
+          allowClear
+        />
+        {spinner}
+        {/* {content} */}
+        <MoviesList moviesList={moviesArr} imgUrl={imgUrl} />
       </div>
     )
   }
