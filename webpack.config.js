@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const plugins = [
   new MiniCssExtractPlugin({
-    filename: '[name].[contenthash].css',
+    filename: '[name].css',
   }),
   new HtmlWebpackPlugin({
     template: './public/index.html',
@@ -42,13 +42,26 @@ module.exports = {
     clean: true,
   },
 
+  resolve: {
+    extensions: ['.js', '.json', '.jsx', 'ts', 'tsx'],
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+      '@public': path.resolve(__dirname, './public'),
+      '@fonts': path.resolve(__dirname, './public/fonts'),
+      '@styles': path.resolve(__dirname, './styles')
+    }
+  },
+
   module: {
     rules: [
       { test: /\.(html)$/, use: ['html-loader'] },
       {
         test: /\.(s[ac]|c)ss$/i,
         use: [
-          MiniCssExtractPlugin.loader,
+          mode !== 'production' ? 'style-loader' : {
+            loader: MiniCssExtractPlugin.loader
+          },
           'css-loader',
           'postcss-loader',
           'sass-loader',
@@ -61,6 +74,9 @@ module.exports = {
       {
         test: /\.(woff2?|eot|ttf|otf)$/i,
         type: 'asset/resource',
+        generator: {
+         filename: 'fonts/[hash][ext]'
+        }
       },
       {
         test: /\.jsx?$/,

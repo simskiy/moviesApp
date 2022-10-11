@@ -1,4 +1,143 @@
+@import '../../styles/mixins.scss';
+
 .movies-item {
-  max-width: 454px;
+  display: grid;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   flex-grow: 1;
+  padding: 5px 10px;
+  position: relative;
+  grid-template-areas:
+    'img title .'
+    'img date date'
+    'img genre genre'
+    'overview overview overview'
+    'vote vote vote';
+  grid-template-columns: 60px 1fr 45px;
+  column-gap: 6px;
+  margin-top: 20px;
+
+  &__title {
+    font-size: 20px;
+    font-weight: 400;
+    grid-area: title;
+    margin: 0;
+    line-height: 28px;
+  }
+
+  &__img {
+    width: 60px;
+    // float: left;
+    grid-area: img;
+  }
+
+  &__release-date {
+    grid-area: date;
+    color: #827e7e;
+    font-size: 12px;
+    margin: 0;
+    line-height: 22px;
+    margin-top: 7px;
+  }
+
+  &__genre {
+    grid-area: genre;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  &__genre-item {
+    height: 20px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    background: #fafafa;
+    padding: 0 5px;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 12px;
+    margin-right: 8px;
+  }
+
+  &__overview {
+    grid-area: overview;
+    font-size: 12px;
+    line-height: 22px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+
+  &__btn-dotted {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    &:hover {
+      color: blue;
+    }
+  }
+
+  &__vote-average {
+    // position: absolute;
+    grid-area: vote;
+    justify-self: end;
+    height: 45px;
+    line-height: 45px;
+  }
+
+  &__popularity {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #e9d100;
+    border-radius: 50%;
+    font-size: 12px;
+    text-align: center;
+    font-weight: 400;
+    // grid-area: popularity;
+  }
+}
+
+@include tablet {
+  .movies-item {
+    max-width: 420px;
+  }
+}
+
+@include desktop {
+  .movies-item {
+    max-width: 454px;
+    padding: 0;
+    padding-right: 20px;
+    grid-template-areas:
+      'img title .'
+      'img date date'
+      'img genre genre'
+      'img overview overview'
+      'img vote vote';
+    grid-template-columns: 185px 1fr 40px;
+    column-gap: 20px;
+
+    &__title {
+      margin-top: 10px;
+    }
+
+    &__img {
+      width: 185px;
+    }
+
+    &__vote-average {
+      font-size: 15px;
+    }
+
+    &__popularity {
+      top: 10px;
+    }
+  }
 }

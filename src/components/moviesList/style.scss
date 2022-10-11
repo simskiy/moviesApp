@@ -1,3 +1,5 @@
+@import '../../styles/mixins.scss';
+
 .movies-list {
   display: flex;
   flex-wrap: wrap;
@@ -5,4 +7,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+@include tablet {
+  .movies-list {
+    justify-content: space-around;
+  }
 }

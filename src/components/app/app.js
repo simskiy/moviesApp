@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import 'antd/dist/antd.css'
-import { Input } from 'antd'
+import { Input, Pagination } from 'antd'
 
 import MoviesList from '../moviesList/moviesList'
 import getResource from '../../utils/GetResource'
@@ -57,10 +57,12 @@ export default class App extends Component {
             this.getMovies(e.target.value)
           }}
           allowClear
+          autoFocus
         />
         {spinner}
         {/* {content} */}
         <MoviesList moviesList={moviesArr} imgUrl={imgUrl} />
+        <Pagination responsive={true} />
       </div>
     )
   }
