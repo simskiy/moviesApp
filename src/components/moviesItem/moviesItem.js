@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Image, Rate } from 'antd'
 import { parse, format } from 'date-fns'
 
+import Overview from '../overview/overview'
+import BtnDott from '../btn-dotted/btn-dotted'
+
 import getGenre from './getGenre'
 import fallback from './fallback.png'
 import './style.scss'
@@ -52,61 +55,6 @@ export default class MoviesItem extends Component {
         {/* <p className="movies-item__popularity">{opt.popularity}</p> */}
         <p className="movies-item__popularity">{opt.vote_average}</p>
       </li>
-    )
-  }
-}
-
-class Overview extends Component {
-  state = {
-    isPressedText: false,
-  }
-
-  componentDidMount() {
-    if (this.props.text.split(' ').length > this.props.numWords) {
-      this.setState({
-        isPressedText: true,
-      })
-    }
-  }
-
-  toggleOverview = () => {
-    const newValue = !this.state.isPressedText
-    this.setState(() => {
-      return {
-        isPressedText: newValue,
-      }
-    })
-  }
-
-  render() {
-    const { text, numWords } = this.props
-    const textArr = text.split(' ')
-    let out = text
-
-    if (this.state.isPressedText) {
-      out = `${textArr.slice(0, numWords).join(' ')}\u00A0`
-    }
-
-    return (
-      <p className="movies-item__overview">
-        {out}
-        {this.state.isPressedText ? <BtnDott toggleOverview={this.toggleOverview} /> : null}
-      </p>
-    )
-  }
-}
-
-class BtnDott extends Component {
-  render() {
-    return (
-      <button
-        className="movies-item__btn-dotted"
-        onClick={() => {
-          this.props.toggleOverview()
-        }}
-      >
-        ...
-      </button>
     )
   }
 }

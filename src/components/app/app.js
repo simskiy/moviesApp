@@ -17,7 +17,7 @@ export default class App extends Component {
     moviesArr: [],
     imgUrl: null,
     loading: false,
-    valueInput: '',
+    error: false,
   }
 
   componentDidMount() {
@@ -29,26 +29,35 @@ export default class App extends Component {
     })
   }
 
+  onError = () => {
+    this.setState({
+      error: true,
+    })
+  }
+
   getMovies = (str) => {
     this.setState({
       loading: true,
     })
-    this.movies.findMovies(str).then((movies) => {
-      const newMovies = []
-      movies.forEach((movie) => {
-        newMovies.push(movie)
+
+    this.movies
+      .findMovies(str)
+      .then((movies) => {
+        const newMovies = []
+        movies.forEach((movie) => {
+          newMovies.push(movie)
+        })
+        this.setState({
+          moviesArr: newMovies,
+          loading: false,
+        })
       })
-      this.setState({
-        moviesArr: newMovies,
-        loading: false,
-      })
-    })
+      .catch(this.onError)
   }
 
   render() {
-    const { moviesArr, imgUrl, loading } = this.state
+    const { moviesArr, imgUrl, loading, error } = this.state
     const spinner = loading ? <Load /> : null
-    // const content = !loading ? <MoviesList moviesList={moviesArr} imgUrl={imgUrl} /> : null
     return (
       <div className="movies-container">
         <Input
@@ -60,7 +69,6 @@ export default class App extends Component {
           autoFocus
         />
         {spinner}
-        {/* {content} */}
         <MoviesList moviesList={moviesArr} imgUrl={imgUrl} />
         <Pagination responsive={true} />
       </div>
