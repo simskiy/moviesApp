@@ -5,14 +5,16 @@ import MoviesItem from '../moviesItem/moviesItem'
 import './style.scss'
 
 const MoviesList = (props) => {
-  // const getImg = props.getImg
-  return (
-    <ul className="movies-list">
-      {props.moviesList.map((movieItem, ind) => (
-        <MoviesItem key={ind} opt={movieItem} imgUrl={props.imgUrl} />
-      ))}
-    </ul>
-  )
+  if (props.moviesList.length === 0 && !props.firstSearch) {
+    return <p className="movies-list--empty">К сожалению ничего не найдено</p>
+  } else
+    return (
+      <ul className="movies-list">
+        {props.moviesList.map((movieItem, ind) => (
+          <MoviesItem key={ind} opt={movieItem} imgUrl={props.imgUrl} />
+        ))}
+      </ul>
+    )
 }
 
 export default MoviesList

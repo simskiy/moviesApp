@@ -2,12 +2,13 @@ const opt = {
   adult: false,
   api_key: '26a5985902ec1ca50921e555b3baaab3',
   lang: 'en-US',
+  page: 1,
 }
 
 export default class getResource {
   constructor() {
     this.baseUrl = 'https://api.themoviedb.org/3'
-    this.searchMovieUrl = `/search/movie?api_key=${opt.api_key}&language=${opt.lang}&include_adult=${opt.adult}`
+    this.searchMovieUrl = `/search/movie?api_key=${opt.api_key}&language=${opt.lang}&include_adult=${opt.adult}&page=${opt.page}`
     this.getConfigUrl = `/configuration?api_key=${opt.api_key}`
   }
 
@@ -18,6 +19,7 @@ export default class getResource {
   }
 
   async findMovies(request) {
+    if (request.trim() === '') return []
     const movies = await this.getResource(request)
     return movies.results
   }
@@ -32,6 +34,11 @@ export default class getResource {
     const config = await this.getConfig()
     const result = await config.json()
     return result
+  }
+
+  async nextPage(request) {
+    this.opt.page++
+    return await this.findMovies(request)
   }
 }
 

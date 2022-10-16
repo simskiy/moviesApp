@@ -43,11 +43,11 @@ export default class MoviesItem extends Component {
 
   render() {
     const opt = this.props.opt
-    const srcImg = `${this.props.imgUrl}${opt.poster_path}`
+    const srcImg = opt.poster_path ? `${this.props.imgUrl}${opt.poster_path}` : fallback
     return (
       <li className="movies-item">
         <h2 className="movies-item__title">{opt.title}</h2>
-        <Image rootClassName="movies-item__img" src={srcImg} fallback={fallback} loading="lazy" />
+        <Image rootClassName="movies-item__img" src={srcImg} loading="lazy" />
         <p className="movies-item__release-date">{this.convertDate(opt.release_date)}</p>
         <CreateListGenre genres={opt.genre_ids} />
         <Overview text={opt.overview} numWords={35} />
