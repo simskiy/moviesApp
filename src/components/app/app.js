@@ -16,6 +16,7 @@ export default class App extends Component {
   }
   state = {
     moviesArr: [],
+    moviesRated: [],
     imgUrl: null,
     loading: false,
     error: false,
@@ -43,7 +44,6 @@ export default class App extends Component {
   }
 
   getMovies = (str) => {
-    // if (str.trim() === '') return
     this.setState({
       loading: true,
     })
@@ -65,6 +65,15 @@ export default class App extends Component {
         this.onError(error)
       })
   }
+  changeRate = (ind, value) => {
+    const newMoviesArr = this.state.moviesArr
+    this.setState(() => {
+      newMoviesArr.map((item, index) => {
+        if (index === ind) item.rate = value
+      })
+      return newMoviesArr
+    })
+  }
 
   handleChange = (page) => {
     this.setState({
@@ -76,7 +85,6 @@ export default class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.moviesArr !== this.state.moviesArr) {
-      console.log(prevState)
       this.setState({
         firstSearch: false,
       })
@@ -89,7 +97,12 @@ export default class App extends Component {
     const errorMessage = error ? <ErrorIndicator /> : null
     const spinner = loading ? <Load /> : null
     const content = hasData ? (
-      <MoviesList moviesList={moviesArr.slice(minIndex, maxIndex)} imgUrl={imgUrl} firstSearch={firstSearch} />
+      <MoviesList
+        moviesList={moviesArr.slice(minIndex, maxIndex)}
+        imgUrl={imgUrl}
+        firstSearch={firstSearch}
+        changeRate={this.changeRate}
+      />
     ) : null
     return (
       <div className="movies-container">

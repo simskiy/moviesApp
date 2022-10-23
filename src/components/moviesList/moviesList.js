@@ -11,7 +11,14 @@ const MoviesList = (props) => {
     return (
       <ul className="movies-list">
         {props.moviesList.map((movieItem, ind) => (
-          <MoviesItem key={ind} opt={movieItem} imgUrl={props.imgUrl} />
+          <MoviesItem
+            key={movieItem.id}
+            opt={movieItem}
+            imgUrl={props.imgUrl}
+            rate={movieItem.rate}
+            changeRate={props.changeRate}
+            ind={ind}
+          />
         ))}
       </ul>
     )

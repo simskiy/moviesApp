@@ -42,7 +42,7 @@ export default class MoviesItem extends Component {
   }
 
   render() {
-    const opt = this.props.opt
+    const { opt, rate, changeRate, ind } = this.props
     const srcImg = opt.poster_path ? `${this.props.imgUrl}${opt.poster_path}` : fallback
     return (
       <li className="movies-item">
@@ -61,8 +61,13 @@ export default class MoviesItem extends Component {
         <p className="movies-item__release-date">{this.convertDate(opt.release_date)}</p>
         <CreateListGenre genres={opt.genre_ids} />
         <Overview text={opt.overview} numWords={35} />
-        <Rate className="movies-item__vote-average" disabled value={opt.vote_average} count={10} allowHalf={true} />
-        {/* <p className="movies-item__popularity">{opt.popularity}</p> */}
+        <Rate
+          className="movies-item__vote-average"
+          count={10}
+          allowHalf={true}
+          value={rate}
+          onChange={(value) => changeRate(ind, value)}
+        />
         <p className="movies-item__popularity">{opt.vote_average}</p>
       </li>
     )
