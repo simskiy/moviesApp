@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import 'antd/dist/antd.css'
-import { Input, Pagination } from 'antd'
-import { debounce } from 'lodash'
+import { Pagination, Tabs } from 'antd'
 
-import MoviesList from '../moviesList/moviesList'
+import SearchPage from '../search-page/search-page'
 import getResource from '../../utils/GetResource'
-import Load from '../load/load'
 import './style.scss'
-import ErrorIndicator from '../errorIndikator/errorIndicator'
+import RatedPage from '../rated-page/rated-page'
 
 export default class App extends Component {
   constructor() {
@@ -65,17 +63,34 @@ export default class App extends Component {
         this.onError(error)
       })
   }
+
   changeRate = (ind, value) => {
     const newMoviesArr = this.state.moviesArr
+    let newMoviesRated = []
     this.setState(() => {
       newMoviesArr.map((item, index) => {
-        if (index === ind) item.rate = value
+        if (index === ind) {
+          item.rate = value
+          newMoviesRated = this.addRatedMovie(this.state.moviesRated, item)
+        }
       })
-      return newMoviesArr
+      return {
+        moviesArr: newMoviesArr,
+        moviesRated: newMoviesRated,
+      }
     })
   }
 
-  handleChange = (page) => {
+  addRatedMovie(arrMovie, movie) {
+    const i = arrMovie.findIndex((e) => e.id === movie.id)
+    if (i > -1) {
+      return arrMovie.map((item) => (item[i] = movie))
+    }
+    arrMovie.push(movie)
+    return arrMovie
+  }
+
+  paginationChange = (page) => {
     this.setState({
       curr: page,
       minIndex: (page - 1) * this.pageSize,
@@ -93,37 +108,45 @@ export default class App extends Component {
 
   render() {
     const { moviesArr, imgUrl, loading, error, curr, minIndex, maxIndex, firstSearch } = this.state
-    const hasData = !(error || loading)
-    const errorMessage = error ? <ErrorIndicator /> : null
-    const spinner = loading ? <Load /> : null
-    const content = hasData ? (
-      <MoviesList
-        moviesList={moviesArr.slice(minIndex, maxIndex)}
-        imgUrl={imgUrl}
-        firstSearch={firstSearch}
-        changeRate={this.changeRate}
-      />
-    ) : null
     return (
       <div className="movies-container">
-        <Input
-          placeholder="Type to search..."
-          onChange={debounce((e) => {
-            this.getMovies(e.target.value)
-          }, 500)}
-          allowClear
-          autoFocus
+        <Tabs
+          defaultActiveKey="1"
+          centered
+          style={{ width: '100%' }}
+          items={[
+            {
+              label: 'Search',
+              key: '1',
+              children: (
+                <SearchPage
+                  imgUrl={imgUrl}
+                  loading={loading}
+                  error={error}
+                  minIndex={minIndex}
+                  maxIndex={maxIndex}
+                  firstSearch={firstSearch}
+                  moviesArr={moviesArr}
+                  changeRate={this.changeRate}
+                  getMovies={this.getMovies}
+                />
+              ),
+            },
+            {
+              label: 'Rated',
+              key: '2',
+              children: <RatedPage />,
+            },
+          ]}
         />
-        {spinner}
-        {errorMessage}
-        {content}
+
         {moviesArr.length ? (
           <Pagination
             className="movies-pagination"
             pageSize={this.pageSize}
             current={curr}
             total={moviesArr.length}
-            onChange={this.handleChange}
+            onChange={this.paginationChange}
           />
         ) : null}
       </div>
