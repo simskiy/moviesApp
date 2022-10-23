@@ -24,12 +24,6 @@ export default class getResource {
     return movies.results
   }
 
-  async getConfig() {
-    const res = await fetch(`${this.baseUrl}${this.getConfigUrl}`)
-    const config = await res.json()
-    return config
-  }
-
   async getImageUrl() {
     const config = await this.getConfig()
     const result = await config.json()

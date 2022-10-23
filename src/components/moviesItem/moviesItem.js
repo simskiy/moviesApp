@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Image, Rate } from 'antd'
+import { Image, Rate, Spin } from 'antd'
 import { parse, format } from 'date-fns'
 
 import Overview from '../overview/overview'
 import BtnDott from '../btn-dotted/btn-dotted'
 
 import getGenre from './getGenre'
-import fallback from './fallback.png'
+import fallback from './fallback.svg'
 import './style.scss'
 
 export default class MoviesItem extends Component {
@@ -47,7 +47,17 @@ export default class MoviesItem extends Component {
     return (
       <li className="movies-item">
         <h2 className="movies-item__title">{opt.title}</h2>
-        <Image rootClassName="movies-item__img" src={srcImg} loading="lazy" />
+        <Image
+          rootClassName="movies-item__img"
+          className={srcImg === fallback ? 'noImage' : null}
+          src={srcImg}
+          loading="lazy"
+          placeholder={
+            <div className="spin">
+              <Spin size="large" />
+            </div>
+          }
+        />
         <p className="movies-item__release-date">{this.convertDate(opt.release_date)}</p>
         <CreateListGenre genres={opt.genre_ids} />
         <Overview text={opt.overview} numWords={35} />

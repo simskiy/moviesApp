@@ -29,13 +29,10 @@ export default class App extends Component {
   pageSize = 6
 
   componentDidMount() {
-    this.movies.getConfig().then((item) => {
-      const result = `${item.images.base_url}${item.images.poster_sizes[2]}`
-      this.setState({
-        imgUrl: result,
-        minIndex: 0,
-        maxIndex: this.pageSize,
-      })
+    this.setState({
+      imgUrl: 'https://image.tmdb.org/t/p/w500/',
+      minIndex: 0,
+      maxIndex: this.pageSize,
     })
   }
 
