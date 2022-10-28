@@ -2,10 +2,10 @@ export default class getResource {
   constructor() {
     this.url = new URL('https://api.themoviedb.org')
     this.api_key = '26a5985902ec1ca50921e555b3baaab3'
-    this.guestId = null
   }
+  static guestId = null
 
-  async createGuestSession() {
+  async #createGuestSession() {
     let guestUrl = new URL('3/authentication/guest_session/new', this.url)
     guestUrl.searchParams.append('api_key', this.api_key)
     const res = await fetch(guestUrl)
@@ -14,14 +14,7 @@ export default class getResource {
     this.guestId = data.guest_session_id
   }
 
-  async setGuestId() {
-    if (localStorage.getItem('guestId') === null) {
-      await this.createGuestSession()
-      localStorage.setItem('guestId', this.guestId)
-    }
-  }
-
-  setParams(url, params) {
+  #setParams(url, params) {
     const defaultOpt = {
       adult: false,
       api_key: this.api_key,
@@ -34,17 +27,31 @@ export default class getResource {
     }
   }
 
+  async getGuestId(reset = false) {
+    if (localStorage.getItem('guestId') === null || reset) {
+      await this.#createGuestSession()
+      localStorage.setItem('guestId', this.guestId)
+    }
+    return this.guestId
+  }
+
   async getGenres() {
     let genreUrl = new URL('3/genre/movie/list', this.url)
-    genreUrl.searchParams.append('api', this.api_key)
+    genreUrl.searchParams.append('api_key', this.api_key)
     const res = await fetch(genreUrl)
     if (!res.ok) throw new Error(`Error: ${res.status}`)
-    return await res.json()
+    const data = await res.json()
+    const out = data.genres.reduce((obj, curr) => {
+      const id = curr.id
+      const name = curr.name
+      return { ...obj, ...{ [id]: name } }
+    }, {})
+    return out
   }
 
   async getResource(request) {
     let findUrl = new URL('3/search/movie', this.url)
-    this.setParams(findUrl, { query: request })
+    this.#setParams(findUrl, { query: request })
     const res = await fetch(findUrl)
     if (!res.ok) throw new Error(`Error: ${res.status}`)
     return await res.json()
