@@ -11,6 +11,7 @@ export default class App extends Component {
   constructor() {
     super()
     this.movies = new getResource()
+    this.movies.setGuestId()
   }
   state = {
     moviesArr: [],

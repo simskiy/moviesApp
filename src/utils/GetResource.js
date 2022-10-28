@@ -1,12 +1,30 @@
 export default class getResource {
   constructor() {
     this.url = new URL('https://api.themoviedb.org')
+    this.api_key = '26a5985902ec1ca50921e555b3baaab3'
+    this.guestId = null
+  }
+
+  async createGuestSession() {
+    let guestUrl = new URL('3/authentication/guest_session/new', this.url)
+    guestUrl.searchParams.append('api_key', this.api_key)
+    const res = await fetch(guestUrl)
+    if (!res.ok) throw new Error(`Error: ${res.status}`)
+    const data = await res.json()
+    this.guestId = data.guest_session_id
+  }
+
+  async setGuestId() {
+    if (localStorage.getItem('guestId') === null) {
+      await this.createGuestSession()
+      localStorage.setItem('guestId', this.guestId)
+    }
   }
 
   setParams(url, params) {
     const defaultOpt = {
       adult: false,
-      api_key: '26a5985902ec1ca50921e555b3baaab3',
+      api_key: this.api_key,
       // lang: 'en-US',
       page: 1,
     }
@@ -14,6 +32,14 @@ export default class getResource {
     for (let key in params) {
       url.searchParams.set(key, params[key])
     }
+  }
+
+  async getGenres() {
+    let genreUrl = new URL('3/genre/movie/list', this.url)
+    genreUrl.searchParams.append('api', this.api_key)
+    const res = await fetch(genreUrl)
+    if (!res.ok) throw new Error(`Error: ${res.status}`)
+    return await res.json()
   }
 
   async getResource(request) {
@@ -35,103 +61,3 @@ export default class getResource {
     return await this.findMovies(request)
   }
 }
-
-/*
-{
-    "images": {
-        "base_url": "http://image.tmdb.org/t/p/",
-        "secure_base_url": "https://image.tmdb.org/t/p/",
-        "backdrop_sizes": [
-            "w300",
-            "w780",
-            "w1280",
-            "original"
-        ],
-        "logo_sizes": [
-            "w45",
-            "w92",
-            "w154",
-            "w185",
-            "w300",
-            "w500",
-            "original"
-        ],
-        "poster_sizes": [
-            "w92",
-            "w154",
-            "w185",
-            "w342",
-            "w500",
-            "w780",
-            "original"
-        ],
-        "profile_sizes": [
-            "w45",
-            "w185",
-            "h632",
-            "original"
-        ],
-        "still_sizes": [
-            "w92",
-            "w185",
-            "w300",
-            "original"
-        ]
-    },
-    "change_keys": [
-        "adult",
-        "air_date",
-        "also_known_as",
-        "alternative_titles",
-        "biography",
-        "birthday",
-        "budget",
-        "cast",
-        "certifications",
-        "character_names",
-        "created_by",
-        "crew",
-        "deathday",
-        "episode",
-        "episode_number",
-        "episode_run_time",
-        "freebase_id",
-        "freebase_mid",
-        "general",
-        "genres",
-        "guest_stars",
-        "homepage",
-        "images",
-        "imdb_id",
-        "languages",
-        "name",
-        "network",
-        "origin_country",
-        "original_name",
-        "original_title",
-        "overview",
-        "parts",
-        "place_of_birth",
-        "plot_keywords",
-        "production_code",
-        "production_companies",
-        "production_countries",
-        "releases",
-        "revenue",
-        "runtime",
-        "season",
-        "season_number",
-        "season_regular",
-        "spoken_languages",
-        "status",
-        "tagline",
-        "title",
-        "translations",
-        "tvdb_id",
-        "tvrage_id",
-        "type",
-        "video",
-        "videos"
-    ]
-}
-*/
