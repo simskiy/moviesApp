@@ -10,14 +10,13 @@ const MoviesList = (props) => {
   } else
     return (
       <ul className="movies-list">
-        {props.moviesList.map((movieItem, ind) => (
+        {props.moviesList.map((movieItem) => (
           <MoviesItem
             key={movieItem.id}
             opt={movieItem}
             imgUrl={props.imgUrl}
             rate={movieItem.rate}
             changeRate={props.changeRate}
-            ind={ind}
           />
         ))}
       </ul>

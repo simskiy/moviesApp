@@ -64,30 +64,28 @@ export default class App extends Component {
       })
   }
 
-  changeRate = (ind, value) => {
+  changeRate = (id, rate) => {
     const newMoviesArr = this.state.moviesArr
-    let newMoviesRated = []
     this.setState(() => {
-      newMoviesArr.map((item, index) => {
-        if (index === ind) {
-          item.rate = value
-          newMoviesRated = this.addRatedMovie(this.state.moviesRated, item)
-        }
+      newMoviesArr.map((item) => {
+        if (item.id === id) item.rate = rate
       })
       return {
         moviesArr: newMoviesArr,
-        moviesRated: newMoviesRated,
+        moviesRated: this.addRatedMovies(id, rate),
       }
     })
   }
 
-  addRatedMovie(arrMovie, movie) {
-    const i = arrMovie.findIndex((e) => e.id === movie.id)
-    if (i > -1) {
-      return arrMovie.map((item) => (item[i] = movie))
+  addRatedMovies(id, rate) {
+    const newMoviesRated = this.state.moviesRated
+    const ind = newMoviesRated.findIndex((item) => item.id === id)
+    if (ind > -1) {
+      newMoviesRated[ind] = { id: id, rate: rate }
+    } else {
+      newMoviesRated.push({ id: id, rate: rate })
     }
-    arrMovie.push(movie)
-    return arrMovie
+    return newMoviesRated
   }
 
   paginationChange = (page) => {
@@ -135,7 +133,16 @@ export default class App extends Component {
             {
               label: 'Rated',
               key: '2',
-              children: <RatedPage />,
+              children: (
+                <RatedPage
+                  imgUrl={imgUrl}
+                  loading={loading}
+                  error={error}
+                  minIndex={minIndex}
+                  maxIndex={maxIndex}
+                  moviesArr={this.state.moviesRated}
+                />
+              ),
             },
           ]}
         />

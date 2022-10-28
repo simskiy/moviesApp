@@ -42,7 +42,7 @@ export default class MoviesItem extends Component {
   }
 
   render() {
-    const { opt, rate, changeRate, ind } = this.props
+    const { opt, rate, changeRate } = this.props
     const srcImg = opt.poster_path ? `${this.props.imgUrl}${opt.poster_path}` : fallback
     return (
       <li className="movies-item">
@@ -66,7 +66,7 @@ export default class MoviesItem extends Component {
           count={10}
           allowHalf={true}
           value={rate}
-          onChange={(value) => changeRate(ind, value)}
+          onChange={(value) => changeRate(opt.id, value)}
         />
         <p className="movies-item__popularity">{opt.vote_average}</p>
       </li>

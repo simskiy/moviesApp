@@ -1,19 +1,25 @@
-const opt = {
-  adult: false,
-  api_key: '26a5985902ec1ca50921e555b3baaab3',
-  lang: 'en-US',
-  page: 1,
-}
-
 export default class getResource {
   constructor() {
-    this.baseUrl = 'https://api.themoviedb.org/3'
-    this.searchMovieUrl = `/search/movie?api_key=${opt.api_key}&language=${opt.lang}&include_adult=${opt.adult}&page=${opt.page}`
-    this.getConfigUrl = `/configuration?api_key=${opt.api_key}`
+    this.url = new URL('https://api.themoviedb.org')
+  }
+
+  setParams(url, params) {
+    const defaultOpt = {
+      adult: false,
+      api_key: '26a5985902ec1ca50921e555b3baaab3',
+      // lang: 'en-US',
+      page: 1,
+    }
+    params = { ...defaultOpt, ...params }
+    for (let key in params) {
+      url.searchParams.set(key, params[key])
+    }
   }
 
   async getResource(request) {
-    const res = await fetch(`${this.baseUrl}${this.searchMovieUrl}&query=${request}`)
+    let findUrl = new URL('3/search/movie', this.url)
+    this.setParams(findUrl, { query: request })
+    const res = await fetch(findUrl)
     if (!res.ok) throw new Error(`Error: ${res.status}`)
     return await res.json()
   }
@@ -22,12 +28,6 @@ export default class getResource {
     if (request.trim() === '') return []
     const movies = await this.getResource(request)
     return movies.results
-  }
-
-  async getImageUrl() {
-    const config = await this.getConfig()
-    const result = await config.json()
-    return result
   }
 
   async nextPage(request) {
