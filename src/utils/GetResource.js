@@ -37,9 +37,14 @@ export default class getResource {
 
   async getGenres() {
     let genreUrl = new URL('3/genre/movie/list', this.url)
+    let res = undefined
     genreUrl.searchParams.append('api_key', this.api_key)
-    const res = await fetch(genreUrl)
-    if (!res.ok) throw new Error(`Error: ${res.status}`)
+    try {
+      res = await fetch(genreUrl)
+      if (!res.ok) throw new Error(`Error: ${res.status}`)
+    } catch (err) {
+      console.log(err)
+    }
     const data = await res.json()
     const out = data.genres.reduce((obj, curr) => {
       const id = curr.id

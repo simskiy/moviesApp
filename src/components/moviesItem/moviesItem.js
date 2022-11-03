@@ -5,6 +5,7 @@ import { parse, format } from 'date-fns'
 import { GenreConsumer } from '../genre-context/genre-context'
 import Overview from '../overview/overview'
 import BtnDott from '../btn-dotted/btn-dotted'
+import Popularity from '../Popularity/popularity'
 
 import fallback from './fallback.svg'
 import './style.scss'
@@ -81,7 +82,7 @@ export default class MoviesItem extends Component {
           value={rate}
           onChange={(value) => changeRate(opt.id, value)}
         />
-        <p className="movies-item__popularity">{opt.vote_average}</p>
+        <Popularity vote={opt.vote_average} />
       </li>
     )
   }
