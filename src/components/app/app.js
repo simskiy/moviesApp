@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import 'antd/dist/antd.css'
-import { Pagination, Tabs } from 'antd'
+import { Tabs } from 'antd'
 
 import SearchPage from '../search-page/search-page'
 import getResource from '../../utils/GetResource'
@@ -19,17 +19,17 @@ export default class App extends Component {
     imgUrl: null,
     loading: false,
     error: false,
-    totalPage: 0,
-    curr: 1,
-    minIndex: 0,
-    maxIndex: 0,
     firstSearch: true,
     genres: null,
+    guestId: null,
   }
 
-  pageSize = 6
-
   componentDidMount() {
+    this.movies.getGuestId().then((id) => {
+      this.setState({
+        guestId: id,
+      })
+    })
     this.movies.getGenres().then((item) => {
       this.setState({
         genres: item,
@@ -93,14 +93,6 @@ export default class App extends Component {
     return newMoviesRated
   }
 
-  paginationChange = (page) => {
-    this.setState({
-      curr: page,
-      minIndex: (page - 1) * this.pageSize,
-      maxIndex: page * this.pageSize,
-    })
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.moviesArr !== this.state.moviesArr) {
       this.setState({
@@ -110,7 +102,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { moviesArr, imgUrl, loading, error, curr, minIndex, maxIndex, firstSearch } = this.state
+    const { moviesArr, imgUrl, loading, error, firstSearch } = this.state
     return (
       <div className="movies-container">
         <GenreProvider value={this.state.genres}>
@@ -127,8 +119,6 @@ export default class App extends Component {
                     imgUrl={imgUrl}
                     loading={loading}
                     error={error}
-                    minIndex={minIndex}
-                    maxIndex={maxIndex}
                     firstSearch={firstSearch}
                     moviesArr={moviesArr}
                     changeRate={this.changeRate}
@@ -140,29 +130,12 @@ export default class App extends Component {
                 label: 'Rated',
                 key: '2',
                 children: (
-                  <RatedPage
-                    imgUrl={imgUrl}
-                    loading={loading}
-                    error={error}
-                    minIndex={minIndex}
-                    maxIndex={maxIndex}
-                    moviesArr={this.state.moviesRated}
-                  />
+                  <RatedPage imgUrl={imgUrl} loading={loading} error={error} moviesArr={this.state.moviesRated} />
                 ),
               },
             ]}
           />
         </GenreProvider>
-
-        {moviesArr.length ? (
-          <Pagination
-            className="movies-pagination"
-            pageSize={this.pageSize}
-            current={curr}
-            total={moviesArr.length}
-            onChange={this.paginationChange}
-          />
-        ) : null}
       </div>
     )
   }

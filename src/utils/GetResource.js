@@ -3,7 +3,6 @@ export default class getResource {
     this.url = new URL('https://api.themoviedb.org')
     this.api_key = '26a5985902ec1ca50921e555b3baaab3'
   }
-  static guestId = null
 
   async #createGuestSession() {
     let guestUrl = new URL('3/authentication/guest_session/new', this.url)
@@ -11,7 +10,7 @@ export default class getResource {
     const res = await fetch(guestUrl)
     if (!res.ok) throw new Error(`Error: ${res.status}`)
     const data = await res.json()
-    this.guestId = data.guest_session_id
+    return data.guest_session_id
   }
 
   #setParams(url, params) {
@@ -29,10 +28,10 @@ export default class getResource {
 
   async getGuestId(reset = false) {
     if (localStorage.getItem('guestId') === null || reset) {
-      await this.#createGuestSession()
-      localStorage.setItem('guestId', this.guestId)
+      const res = await this.#createGuestSession()
+      localStorage.setItem('guestId', res)
     }
-    return this.guestId
+    return localStorage.getItem('guestId')
   }
 
   async getGenres() {
