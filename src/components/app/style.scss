@@ -30,6 +30,8 @@ body {
 }
 
 .movies-pagination {
+  display: flex;
+  justify-content: center;
   margin-top: 35px;
   margin-bottom: 15px;
 }

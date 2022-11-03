@@ -10,10 +10,17 @@ export default class SearchPage extends Component {
   state = {
     curr: 1,
     minIndex: 0,
-    maxIndex: this.pageSize,
+    maxIndex: 0,
   }
 
   pageSize = 6
+
+  componentDidMount() {
+    this.setState({
+      minIndex: 0,
+      maxIndex: this.pageSize,
+    })
+  }
 
   paginationChange = (page) => {
     this.setState({

@@ -34,8 +34,6 @@ export default class App extends Component {
       this.setState({
         genres: item,
         imgUrl: 'https://image.tmdb.org/t/p/w500/',
-        minIndex: 0,
-        maxIndex: this.pageSize,
       })
     })
   }
