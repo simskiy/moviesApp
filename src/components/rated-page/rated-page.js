@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Pagination } from 'antd'
 
+import MoviesList from '../moviesList/moviesList'
+
 export default class RatedPaged extends Component {
   state = {
     curr: 1,
@@ -27,9 +29,17 @@ export default class RatedPaged extends Component {
 
   render() {
     const { moviesArr } = this.props
+    console.log(moviesArr)
     return (
       <>
-        <p>Rated Vidoes</p>
+        <MoviesList
+          moviesList={moviesArr.slice(this.state.minIndex, this.state.maxIndex)}
+          imgUrl={this.props.imgUrl}
+          // firstSearch={firstSearch}
+          // changeRate={changeRate}
+          // setGuestRate={setGuestRate}
+          guestId={this.props.guestId}
+        />
         {moviesArr.length ? (
           <Pagination
             className="movies-pagination"

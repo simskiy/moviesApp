@@ -25,11 +25,15 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.movies.getGuestId().then((id) => {
-      this.setState({
-        guestId: id,
+    this.movies
+      .getGuestId()
+      .then((id) => {
+        this.setState({
+          guestId: id,
+        })
+        return id
       })
-    })
+      .then((id) => this.movies.getGuestRateMovies(id).then((item) => this.setState({ moviesRated: item })))
     this.movies.getGenres().then((item) => {
       this.setState({
         genres: item,
@@ -67,26 +71,29 @@ export default class App extends Component {
       })
   }
 
-  changeRate = (id, rate) => {
-    const newMoviesArr = this.state.moviesArr
+  setGuestRate = (movieId, guestId, value) => {
+    this.movies.setGuestRate(movieId, guestId, value).then((value) => value.success)
+  }
+
+  getGuestRateMovies = (guestId) => {
+    return this.movies.getGuestRateMovies(guestId).then((value) => value)
+  }
+
+  changeRate = (movie) => {
     this.setState(() => {
-      newMoviesArr.map((item) => {
-        if (item.id === id) item.rate = rate
-      })
       return {
-        moviesArr: newMoviesArr,
-        moviesRated: this.addRatedMovies(id, rate),
+        moviesRated: this.addRatedMovies(movie),
       }
     })
   }
 
-  addRatedMovies(id, rate) {
+  addRatedMovies(movie) {
     const newMoviesRated = this.state.moviesRated
-    const ind = newMoviesRated.findIndex((item) => item.id === id)
+    const ind = newMoviesRated.findIndex((item) => item.id === movie.id)
     if (ind > -1) {
-      newMoviesRated[ind] = { id: id, rate: rate }
+      newMoviesRated[ind] = movie
     } else {
-      newMoviesRated.push({ id: id, rate: rate })
+      newMoviesRated.push(movie)
     }
     return newMoviesRated
   }
@@ -121,6 +128,8 @@ export default class App extends Component {
                     moviesArr={moviesArr}
                     changeRate={this.changeRate}
                     getMovies={this.getMovies}
+                    setGuestRate={this.setGuestRate}
+                    guestId={this.state.guestId}
                   />
                 ),
               },
@@ -128,7 +137,14 @@ export default class App extends Component {
                 label: 'Rated',
                 key: '2',
                 children: (
-                  <RatedPage imgUrl={imgUrl} loading={loading} error={error} moviesArr={this.state.moviesRated} />
+                  <RatedPage
+                    imgUrl={imgUrl}
+                    loading={loading}
+                    error={error}
+                    moviesArr={this.state.moviesRated}
+                    getGuestRateMovies={this.getGuestRateMovies}
+                    guestId={this.state.guestId}
+                  />
                 ),
               },
             ]}

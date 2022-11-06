@@ -31,7 +31,7 @@ export default class SearchPage extends Component {
   }
 
   render() {
-    const { moviesArr, imgUrl, loading, error, firstSearch, changeRate, getMovies } = this.props
+    const { moviesArr, imgUrl, loading, error, firstSearch, changeRate, getMovies, setGuestRate, guestId } = this.props
 
     const hasData = !(error || loading)
     const errorMessage = error ? <ErrorIndicator /> : null
@@ -42,9 +42,10 @@ export default class SearchPage extends Component {
         imgUrl={imgUrl}
         firstSearch={firstSearch}
         changeRate={changeRate}
+        setGuestRate={setGuestRate}
+        guestId={guestId}
       />
     ) : null
-
     return (
       <>
         <Input

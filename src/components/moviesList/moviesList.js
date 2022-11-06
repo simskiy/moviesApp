@@ -17,6 +17,8 @@ const MoviesList = (props) => {
             imgUrl={props.imgUrl}
             rate={movieItem.rate}
             changeRate={props.changeRate}
+            setGuestRate={props.setGuestRate}
+            guestId={props.guestId}
           />
         ))}
       </ul>
