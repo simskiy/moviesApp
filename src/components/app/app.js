@@ -29,17 +29,25 @@ export default class App extends Component {
       .getGuestId()
       .then((id) => {
         this.setState({
+          error: false,
           guestId: id,
         })
         return id
       })
       .then((id) => this.movies.getGuestRateMovies(id).then((item) => this.setState({ moviesRated: item })))
-    this.movies.getGenres().then((item) => {
-      this.setState({
-        genres: item,
-        imgUrl: 'https://image.tmdb.org/t/p/w500/',
+    this.movies
+      .getGenres()
+      .then((item) =>
+        this.setState({
+          error: false,
+          genres: item,
+          imgUrl: 'https://image.tmdb.org/t/p/w500/',
+        }).catch((err) => this.onError(err))
+      )
+      .catch((err) => {
+        console.log(`ошибка: ${err}`)
+        this.onError(err)
       })
-    })
   }
 
   onError = () => {
@@ -99,7 +107,7 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.moviesArr !== this.state.moviesArr) {
+    if (prevState.moviesArr !== this.state.moviesArr && this.state.error) {
       this.setState({
         firstSearch: false,
       })

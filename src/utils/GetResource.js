@@ -57,6 +57,7 @@ export default class getResource {
     } catch {
       return false
     }
+    // res = await fetch(getGuestRateUrl)
     const movies = await res.json()
     return movies.results
   }
@@ -91,8 +92,13 @@ export default class getResource {
   async getResource(request) {
     let findUrl = new URL('3/search/movie', this.base_url)
     this.#setParams(findUrl, { query: request })
-    const res = await fetch(findUrl)
-    if (!res.ok) throw new Error(`Error: ${res.status}`)
+    let res = undefined
+    try {
+      res = await fetch(findUrl)
+      // if (!res.ok) throw new Error(`Error: ${res.status}`)
+    } catch {
+      return false
+    }
     return await res.json()
   }
 

@@ -45,7 +45,6 @@ export default class MoviesItem extends Component {
   render() {
     const { opt, changeRate, setGuestRate, guestId } = this.props
     const srcImg = opt.poster_path ? `${this.props.imgUrl}${opt.poster_path}` : fallback
-    console.log(opt)
     return (
       <li className="movies-item">
         <h2 className="movies-item__title">{opt.title}</h2>

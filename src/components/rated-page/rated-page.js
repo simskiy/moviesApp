@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Pagination } from 'antd'
 
 import MoviesList from '../moviesList/moviesList'
+import ErrorIndicator from '../errorIndikator/errorIndicator'
 
 export default class RatedPaged extends Component {
   state = {
@@ -29,17 +30,22 @@ export default class RatedPaged extends Component {
 
   render() {
     const { moviesArr } = this.props
-    console.log(moviesArr)
+    const hasData = !(this.props.error || this.props.loading)
+    const errorMessage = this.props.error ? <ErrorIndicator /> : null
+    const contentRate = hasData ? (
+      <MoviesList
+        moviesList={moviesArr ? moviesArr.slice(this.state.minIndex, this.state.maxIndex) : null}
+        imgUrl={this.props.imgUrl}
+        // firstSearch={firstSearch}
+        // changeRate={changeRate}
+        // setGuestRate={setGuestRate}
+        guestId={this.props.guestId}
+      />
+    ) : null
     return (
       <>
-        <MoviesList
-          moviesList={moviesArr.slice(this.state.minIndex, this.state.maxIndex)}
-          imgUrl={this.props.imgUrl}
-          // firstSearch={firstSearch}
-          // changeRate={changeRate}
-          // setGuestRate={setGuestRate}
-          guestId={this.props.guestId}
-        />
+        {contentRate}
+        {errorMessage}
         {moviesArr.length ? (
           <Pagination
             className="movies-pagination"

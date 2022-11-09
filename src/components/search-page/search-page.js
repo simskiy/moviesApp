@@ -35,7 +35,7 @@ export default class SearchPage extends Component {
 
     const hasData = !(error || loading)
     const errorMessage = error ? <ErrorIndicator /> : null
-    const spinner = loading ? <Load /> : null
+    const spinner = loading && !error ? <Load /> : null
     const contentSearch = hasData ? (
       <MoviesList
         moviesList={moviesArr.slice(this.state.minIndex, this.state.maxIndex)}

@@ -5,6 +5,7 @@ import MoviesItem from '../moviesItem/moviesItem'
 import './style.scss'
 
 const MoviesList = (props) => {
+  if (props.moviesList === null) return false
   if (props.moviesList.length === 0 && !props.firstSearch) {
     return <p className="movies-list--empty">К сожалению ничего не найдено</p>
   } else
