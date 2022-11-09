@@ -11,7 +11,7 @@ export default class getResource {
     try {
       res = await fetch(guestUrl)
     } catch {
-      return false
+      return null
     }
     if (!res.ok) throw new Error(`Error: ${res.status}`)
     const data = await res.json()
@@ -55,7 +55,7 @@ export default class getResource {
     try {
       res = await fetch(getGuestRateUrl)
     } catch {
-      return false
+      return null
     }
     // res = await fetch(getGuestRateUrl)
     const movies = await res.json()
@@ -63,7 +63,9 @@ export default class getResource {
   }
 
   async getGuestId(reset = false) {
-    if (localStorage.getItem('guestId') === null || reset) {
+    const value = localStorage.getItem('guestId')
+    if (value === null || value === 'null' || reset) {
+      console.log(localStorage.getItem('guestId'))
       const res = await this.#createGuestSession()
       localStorage.setItem('guestId', res)
     }

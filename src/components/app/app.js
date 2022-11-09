@@ -42,7 +42,7 @@ export default class App extends Component {
           error: false,
           genres: item,
           imgUrl: 'https://image.tmdb.org/t/p/w500/',
-        }).catch((err) => this.onError(err))
+        })
       )
       .catch((err) => {
         console.log(`ошибка: ${err}`)
