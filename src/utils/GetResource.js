@@ -65,7 +65,6 @@ export default class getResource {
   async getGuestId(reset = false) {
     const value = localStorage.getItem('guestId')
     if (value === null || value === 'null' || reset) {
-      console.log(localStorage.getItem('guestId'))
       const res = await this.#createGuestSession()
       localStorage.setItem('guestId', res)
     }

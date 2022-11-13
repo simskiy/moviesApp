@@ -19,7 +19,7 @@ export default class App extends Component {
     imgUrl: null,
     loading: false,
     error: false,
-    firstSearch: true,
+    firstSearch: false,
     genres: null,
     guestId: null,
   }
@@ -45,7 +45,6 @@ export default class App extends Component {
         })
       )
       .catch((err) => {
-        console.log(`ошибка: ${err}`)
         this.onError(err)
       })
   }
@@ -72,6 +71,7 @@ export default class App extends Component {
           error: false,
           moviesArr: newMovies,
           loading: false,
+          firstSearch: true,
         })
       })
       .catch((error) => {

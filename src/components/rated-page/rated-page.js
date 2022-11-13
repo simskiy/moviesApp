@@ -36,9 +36,6 @@ export default class RatedPaged extends Component {
       <MoviesList
         moviesList={moviesArr ? moviesArr.slice(this.state.minIndex, this.state.maxIndex) : null}
         imgUrl={this.props.imgUrl}
-        // firstSearch={firstSearch}
-        // changeRate={changeRate}
-        // setGuestRate={setGuestRate}
         guestId={this.props.guestId}
       />
     ) : null

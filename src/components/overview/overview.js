@@ -3,6 +3,10 @@ import React, { Component } from 'react'
 import BtnDott from '../btn-dotted/btn-dotted'
 
 export default class Overview extends Component {
+  state = {
+    isPressedText: false,
+  }
+
   toggleOverview = () => {
     const newValue = !this.state.isPressedText
     this.setState(() => {
@@ -18,16 +22,13 @@ export default class Overview extends Component {
     let out = text
 
     if (this.props.text.split(' ').length > this.props.numWords) {
-      out = `${textArr.slice(0, numWords).join(' ')}\u00A0`
+      out = (
+        <>
+          `${textArr.slice(0, numWords).join(' ')}` <BtnDott toggleOverview={this.toggleOverview} />
+        </>
+      )
     }
 
-    // console.log(out.split(' ').length, this.state.isPressedText)
-
-    return (
-      <p className="movies-item__overview">
-        {out}
-        <BtnDott toggleOverview={this.toggleOverview} />
-      </p>
-    )
+    return <p className="movies-item__overview">{out}</p>
   }
 }

@@ -28,6 +28,7 @@
     display: flex;
     justify-content: space-around;
     width: 60px;
+    max-height: 90px;
     // float: left;
     grid-area: img;
   }
@@ -134,6 +135,7 @@
 
     &__img {
       width: 185px;
+      max-height: 280px;
     }
 
     &__vote-average {

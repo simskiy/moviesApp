@@ -6,7 +6,7 @@ export default class BtnDott extends Component {
       <button
         className="movies-item__btn-dotted"
         onClick={() => {
-          this.props.toggleOverview()
+          this.props.toggleOverview(true)
         }}
       >
         ...
